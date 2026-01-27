@@ -45,4 +45,4 @@ class BookInstance(models.Model):
     status = models.CharField(verbose_name="Status", max_length=1, choices=LOAN_STATUS, blank=True, default="d")
 
     def __str__(self):
-        return str(self.uuid)
+        return f"{self.book} ({self.uuid})"
