@@ -1,0 +1,1 @@
+mokomasis projektas su Django
