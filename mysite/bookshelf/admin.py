@@ -1,10 +1,23 @@
 from django.contrib import admin
 from .models import Author, Genre, Book, BookInstance
 
+class AuthorAdmin(admin.ModelAdmin):
+    list_display = ("short_name", "display_books")
+
+    def short_name(self, obj):
+        if obj.first_name:
+            return f"{obj.last_name}, {obj.first_name[0]}."
+        return obj.last_name
+
+    short_name.short_description = "Author"
+    short_name.admin_order_field = "last_name"
 
 class BookInstanceInline(admin.TabularInline):
     model = BookInstance
     extra = 0
+    can_delete = False
+    readonly_fields = ['uuid']
+    fields = ['status', 'due_back', 'uuid']
 
 class BookAdmin(admin.ModelAdmin):
     list_display = ["title", "author", "display_genre"]
@@ -24,7 +37,7 @@ class BookInstanceAdmin(admin.ModelAdmin):
 )
 
 # Register your models here.
-admin.site.register(Author)
+admin.site.register(Author, AuthorAdmin)
 admin.site.register(Genre)
 admin.site.register(Book, BookAdmin)
 admin.site.register(BookInstance, BookInstanceAdmin)

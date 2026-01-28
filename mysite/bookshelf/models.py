@@ -1,5 +1,6 @@
 import uuid
 
+import books
 from django.db import models
 
 
@@ -7,6 +8,10 @@ from django.db import models
 class Author(models.Model):
     first_name = models.CharField()
     last_name = models.CharField()
+
+    def display_books(self):
+        return ", ".join(book.title for book in self.books.all())
+    display_books.short_description = "Books"
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -22,7 +27,8 @@ class Book(models.Model):
     title = models.CharField()
     author = models.ForeignKey(to="Author",
                                on_delete=models.SET_NULL,
-                               null=True, blank=True)
+                               null=True, blank=True,
+                               related_name="books")
     summary = models.TextField()
     isbn = models.CharField(max_length=13)
     genre = models.ManyToManyField(to="Genre")
