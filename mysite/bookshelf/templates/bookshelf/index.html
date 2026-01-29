@@ -1,17 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Bookshelf</title>
-</head>
-<body>
-<h1>Welcome to the Bookshelf Application</h1>
-<p>This is the main page of the Bookshelf application.</p>
+{% extends 'bookshelf/base.html' %}
 
+{% block title %}
+Bookshelf Home
+{% endblock %}
+
+{% block content %}
+<h1>Stats</h1>
 <p>Books: <b>{{ num_books }}</b></p>
 <p>Copies: <b>{{ num_instances }}</b></p>
 <p>Available: <b>{{ num_instances_available }}</b></p>
 <p>Authors: <b>{{ num_authors }}</b></p>
-
-</body>
-</html>
+{% endblock %}
