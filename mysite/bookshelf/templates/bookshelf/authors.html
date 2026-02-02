@@ -1,0 +1,13 @@
+{% extends 'bookshelf/base.html' %}
+
+{% block title %} Authors {% endblock %}
+
+{% block content %}
+
+{% for author in authors %}
+<p>{{author}}</p>
+<hr>
+{% endfor %}
+
+{% endblock %}
+

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .models import Book, Author, BookInstance
 
+
 # Create your views here.
 def index(request):
     num_books = Book.objects.count()
@@ -16,3 +17,10 @@ def index(request):
     }
 
     return render(request, 'bookshelf/index.html', context=context)
+
+
+def authors(request):
+    context = {
+        'authors': Author.objects.all(),
+    }
+    return render(request, 'bookshelf/authors.html', context=context)
