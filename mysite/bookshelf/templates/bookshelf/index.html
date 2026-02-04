@@ -5,9 +5,13 @@ Bookshelf Home
 {% endblock %}
 
 {% block content %}
-<h1>Stats</h1>
+<h1 class ='mb-5'>Stats</h1>
 <p>Books: <b>{{ num_books }}</b></p>
+<hr>
 <p>Copies: <b>{{ num_instances }}</b></p>
+<hr>
 <p>Available: <b>{{ num_instances_available }}</b></p>
+<hr>
 <p>Authors: <b>{{ num_authors }}</b></p>
+<hr>
 {% endblock %}

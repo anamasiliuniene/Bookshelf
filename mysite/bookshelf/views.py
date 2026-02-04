@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.views import generic
+
 from .models import Book, Author, BookInstance
 
 
@@ -24,3 +26,20 @@ def authors(request):
         'authors': Author.objects.all(),
     }
     return render(request, 'bookshelf/authors.html', context=context)
+
+def author(request, author_id):
+    context = {
+        'author': Author.objects.get(pk=author_id),
+    }
+    return render(request, 'bookshelf/author.html', context=context)
+
+
+class BookListView(generic.ListView):
+    model = Book
+    template_name = 'bookshelf/books.html'
+    context_object_name = 'books'
+
+class BookDetailView(generic.DetailView):
+    model = Book
+    template_name = 'bookshelf/book.html'
+    context_object_name = 'book'

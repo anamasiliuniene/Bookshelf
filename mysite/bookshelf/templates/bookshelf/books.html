@@ -1,0 +1,12 @@
+{% extends 'bookshelf/base.html' %}
+
+{% block title %} Books {% endblock %}
+
+{% block content %}
+
+<h1 class ='mb-5'> Books</h1>
+{% for book in books %}
+<p><a href="{% url 'book' book.pk %}"> {{ book.title }}</a></p>
+<hr>
+{% endfor %}
+{% endblock %}

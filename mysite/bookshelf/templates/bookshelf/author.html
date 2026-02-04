@@ -1,0 +1,16 @@
+{% extends 'bookshelf/base.html' %}
+
+{% block title %} Author {% endblock %}
+
+{% block content %}
+
+<p> <b>{{ author.first_name }} {{ author.last_name }} </b></p>
+<p></p> {{ author.description}} </p>
+
+<p> <b> Related books:</b></p>
+{% for book in author.books.all %}
+<p><a href="{% url 'book' book.pk %}"> {{ book.title }} </a> </p>
+{% empty %}
+<p>No books available</p>
+{% endfor %}
+{% endblock %}

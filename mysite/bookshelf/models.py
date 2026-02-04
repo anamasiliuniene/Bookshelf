@@ -8,6 +8,7 @@ from django.db import models
 class Author(models.Model):
     first_name = models.CharField()
     last_name = models.CharField()
+    description = models.TextField(default = "")
 
     def display_books(self):
         return ", ".join(book.title for book in self.books.all())
@@ -43,7 +44,11 @@ class Book(models.Model):
 
 class BookInstance(models.Model):
     uuid = models.UUIDField(verbose_name="UUID", default=uuid.uuid4)
-    book = models.ForeignKey(to="Book", verbose_name="Book", on_delete=models.SET_NULL, null=True, blank=True, related_name="instances")
+    book = models.ForeignKey(to="Book",
+                             verbose_name="Book",
+                             on_delete=models.SET_NULL,
+                             null=True, blank=True,
+                             related_name="instances")
     due_back = models.DateField(null=True, blank=True)
 
     LOAN_STATUS = (
