@@ -1,9 +1,12 @@
 {% extends 'bookshelf/base.html' %}
 
 {% block title %}Book{% endblock %}
-
+{% load static %}
 {% block content %}
 
+{% if book.cover %}
+<img class="card-img-top mb-3 rounded" src="{{ book.cover.url }}" style = "max-width: 20%" alt="...">
+{% endif %}
 <p><b>"{{ book.title }}"</b> / by {{ book.author }}</p>
 <p><i> ISBN: {{ book.isbn }}</i></p>
 <p><i>{{ book.display_genre }}</i></p>
@@ -12,30 +15,30 @@
 <p><b>Availability:</b></p>
 
 {% for instance in book.instances.all %}
-  <p>ID: {{ instance.uuid }}</p>
+<p>ID: {{ instance.uuid }}</p>
 
-  <p class="{% if instance.status == 'a' %}text-success
+<p class="{% if instance.status == 'a' %}text-success
               {% elif instance.status == 'r' %}text-warning
               {% elif instance.status == 't' %}text-danger
               {% else %}text-secondary{% endif %}">
     {% if instance.status == 'a' %}
-      Available
+    Available
     {% elif instance.status == 'r' %}
-      Reserved
+    Reserved
     {% elif instance.status == 't' %}
-      Taken
+    Taken
     {% else %}
-      Administered
+    Administered
     {% endif %}
-  </p>
+</p>
 
-  {% if instance.due_back %}
-    <p>Due back: {{ instance.due_back|date:"M d, Y" }}</p>
-  {% endif %}
+{% if instance.due_back %}
+<p>Due back: {{ instance.due_back|date:"M d, Y" }}</p>
+{% endif %}
 
-  <hr>
+<hr>
 {% empty %}
-  <p>No copies available</p>
+<p>No copies available</p>
 {% endfor %}
 
 {% endblock %}
