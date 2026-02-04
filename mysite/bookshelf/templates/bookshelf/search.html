@@ -1,0 +1,23 @@
+{% extends 'bookshelf/base.html' %}
+
+{% block title %}
+Search results
+{% endblock %}
+
+{% block content %}
+<h1> Search by keyword "{{query}}" </h1>
+<h3 class ='mb-3'>Result in books:</h3>
+{% for book in books %}
+<p> <a href = "{% url 'book' book.pk %}">{{ book.title }} ({{book.author}})</a> </p>
+{% empty %}
+<p> No books found </p>
+{% endfor %}
+
+<h3 class ='mb-3'>Result in authors:</h3>
+{% for author in authors %}
+<p> <a href = "{% url 'author' author.pk %}">{{ author }} </a> </p>
+{% empty %}
+<p> No authors found </p>
+{% endfor %}
+
+{% endblock %}
