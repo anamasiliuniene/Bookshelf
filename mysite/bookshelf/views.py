@@ -1,8 +1,10 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.views import generic
 from .models import Book, Author, BookInstance
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 def index(request):
@@ -61,3 +63,12 @@ def search(request):
                                      Q(last_name__icontains=query))
     }
     return render(request, 'bookshelf/search.html', context=context)
+
+class MyBookInstanceListView(LoginRequiredMixin, generic.ListView):
+    model = BookInstance
+    template_name = 'mybooks.html'
+    context_object_name = 'instances'
+
+    def get_queryset(self):
+        # Only show BookInstances where the logged-in user is the reader
+        return BookInstance.objects.filter(reader=self.request.user)

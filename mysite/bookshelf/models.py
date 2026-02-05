@@ -1,7 +1,10 @@
 import uuid
-
+from django.utils import timezone
+from django.contrib.auth.models import User
 import books
 from django.db import models
+
+
 
 
 # Create your models here.
@@ -50,7 +53,11 @@ class BookInstance(models.Model):
                              on_delete=models.SET_NULL,
                              null=True, blank=True,
                              related_name="instances")
+
     due_back = models.DateField(null=True, blank=True)
+    reader = models.ForeignKey(to=User,
+                               on_delete = models.SET_NULL,
+                               null=True, blank=True)
 
     LOAN_STATUS = (
         ('d', 'Administered'),
@@ -60,6 +67,9 @@ class BookInstance(models.Model):
     )
 
     status = models.CharField(verbose_name="Status", max_length=1, choices=LOAN_STATUS, blank=True, default="d")
+
+def is_overdue(self):
+    return self.due_back and timezone.now().date > self.due_back.date()
 
     def __str__(self):
         return f"{self.book} ({self.uuid})"

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+My Books
+{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">My Books</h1>
+
+{% if instances %}
+  {% for instance in instances %}
+    <p><strong>{{ instance.book.title }}</strong> ({{ instance.book.author }})</p>
+    <p>UUID: {{ instance.uuid }}</p>
+<p class="{% if instance.is_overdue %} text-danger"
+    <p>Status: {{ instance.get_status_display }}{% if instance.due_back %} - Due: {{ instance.due_back }}{% endif %}</p>
+    <hr>
+  {% endfor %}
+{% else %}
+  <p>You have no books currently.</p>
+{% endif %}
+
+{% endblock %}
