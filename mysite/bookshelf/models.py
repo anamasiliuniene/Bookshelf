@@ -1,5 +1,5 @@
 import uuid
-from django.utils import timezone
+from django.utils.timezone import now
 from django.contrib.auth.models import User
 import books
 from django.db import models
@@ -68,8 +68,9 @@ class BookInstance(models.Model):
 
     status = models.CharField(verbose_name="Status", max_length=1, choices=LOAN_STATUS, blank=True, default="d")
 
-def is_overdue(self):
-    return self.due_back and timezone.now().date > self.due_back.date()
+    @property
+    def is_overdue(self):
+        return self.due_back and self.due_back < now().date()
 
     def __str__(self):
         return f"{self.book} ({self.uuid})"
