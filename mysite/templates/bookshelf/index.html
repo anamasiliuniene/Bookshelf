@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Bookshelf Home
+{% endblock %}
+
+{% block content %}
+<h1 class="mb-5">Stats</h1>
+
+<table class="table table-striped">
+    <tbody>
+        <tr>
+            <td>Books:</td>
+            <td><b>{{ num_books }}</b></td>
+        </tr>
+        <tr>
+            <td>Copies:</td>
+            <td><b>{{ num_instances }}</b></td>
+        </tr>
+        <tr>
+            <td>Available:</td>
+            <td><b>{{ num_instances_available }}</b></td>
+        </tr>
+        <tr>
+            <td>Authors:</td>
+            <td><b>{{ num_authors }}</b></td>
+        </tr>
+        <tr>
+            <td>Your visits:</td>
+            <td><b>{{ num_visits }}</b></td>
+        </tr>
+    </tbody>
+</table>
+
+{% endblock %}
