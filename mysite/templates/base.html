@@ -42,6 +42,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'books' %}">BOOKS</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'mybooks' %}">MY BOOKS</a>
+                </li>
             </ul>
 
             <!-- RIGHT SIDE (pushes everything right) -->
@@ -61,9 +64,6 @@
                     <li class="nav-item">
                         <span class="nav-link">👤 {{ user.username }}</span>
                     </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'mybooks' %}">MY BOOKS</a>
-                </li>
                     <li class="nav-item">
                         <form method="post" action="{% url 'logout' %}">
                             {% csrf_token %}
@@ -74,6 +74,10 @@
                         </form>
                     </li>
                     {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'signup' %}">Registration</a>
+                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'login' %}">Login</a>
                     </li>

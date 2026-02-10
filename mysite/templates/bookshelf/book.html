@@ -5,12 +5,36 @@
 {% block content %}
 
 {% if book.cover %}
-<img class="card-img-top mb-3 rounded" src="{{ book.cover.url }}" style = "max-width: 20%" alt="...">
+<img
+    src="{{ book.cover.url }}"
+    alt="{{ book.title }} cover"
+    class="img-thumbnail float-start me-3 mb-3"
+    style="width: 180px; height: auto;">
 {% endif %}
+
 <p><b>"{{ book.title }}"</b> / by {{ book.author }}</p>
-<p><i> ISBN: {{ book.isbn }}</i></p>
+<p><i>ISBN: {{ book.isbn }}</i></p>
 <p><i>{{ book.display_genre }}</i></p>
 <p>{{ book.summary }}</p>
+
+<p><b>Reviews:</b></p>
+{% if user.is_authenticated %}
+<form method = "post" class = "mb-2" >
+    {% csrf_token %}
+    {% load crispy_forms_tags %}
+    {{ form | crispy }}
+    <button type="submit" class="btn btn-primary">
+    <i class="bi bi-pencil-square"></i> Submit Review
+</button>
+</form>
+{% endif %}
+{% for review in book.reviews.all %}
+<p> <em>{{ review.reviewer }}, {{ review.date_created }}</em></p>
+<p> {{ review.content }}</p>
+<hr>
+{% empty %}
+<p>No reviews available</p>
+{% endfor %}
 
 <p><b>Availability:</b></p>
 

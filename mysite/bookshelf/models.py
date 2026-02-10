@@ -3,18 +3,18 @@ from django.utils.timezone import now
 from django.contrib.auth.models import User
 import books
 from django.db import models
-
-
+from tinymce.models import HTMLField
 
 
 # Create your models here.
 class Author(models.Model):
     first_name = models.CharField()
     last_name = models.CharField()
-    description = models.TextField(default = "")
+    description = HTMLField(verbose_name="Description", max_length=3000, default="")
 
     def display_books(self):
         return ", ".join(book.title for book in self.books.all())
+
     display_books.short_description = "Books"
 
     def __str__(self):
@@ -26,6 +26,7 @@ class Genre(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Book(models.Model):
     title = models.CharField()
@@ -46,6 +47,7 @@ class Book(models.Model):
     def __str__(self):
         return self.title
 
+
 class BookInstance(models.Model):
     uuid = models.UUIDField(verbose_name="UUID", default=uuid.uuid4)
     book = models.ForeignKey(to="Book",
@@ -56,7 +58,7 @@ class BookInstance(models.Model):
 
     due_back = models.DateField(null=True, blank=True)
     reader = models.ForeignKey(to=User,
-                               on_delete = models.SET_NULL,
+                               on_delete=models.SET_NULL,
                                null=True, blank=True)
 
     LOAN_STATUS = (
@@ -74,3 +76,16 @@ class BookInstance(models.Model):
 
     def __str__(self):
         return f"{self.book} ({self.uuid})"
+
+class BookReview(models.Model):
+        book = models.ForeignKey(to="Book", on_delete=models.SET_NULL,
+                                 null=True, blank=True,
+                                 related_name="reviews")
+        reviewer = models.ForeignKey(to=User, on_delete=models.SET_NULL,
+                                     null=True, blank=True)
+        date_created = models.DateTimeField(auto_now_add=True)
+        content = models.TextField()
+
+        class Meta:
+            ordering = ["-date_created"]
+
