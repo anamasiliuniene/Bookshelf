@@ -1,9 +1,10 @@
 import uuid
 from django.utils.timezone import now
 from django.contrib.auth.models import User
-import books
 from django.db import models
 from tinymce.models import HTMLField
+from django.contrib.auth.models import AbstractUser
+from django.db import models
 
 
 # Create your models here.
@@ -48,6 +49,10 @@ class Book(models.Model):
         return self.title
 
 
+class CustomUser(AbstractUser):
+    photo = models.ImageField(upload_to="photos", null=True, blank=True)
+
+
 class BookInstance(models.Model):
     uuid = models.UUIDField(verbose_name="UUID", default=uuid.uuid4)
     book = models.ForeignKey(to="Book",
@@ -57,7 +62,8 @@ class BookInstance(models.Model):
                              related_name="instances")
 
     due_back = models.DateField(null=True, blank=True)
-    reader = models.ForeignKey(to=User,
+    reader = models.ForeignKey(to="bookshelf.CustomUser",
+                               verbose_name="Reader",
                                on_delete=models.SET_NULL,
                                null=True, blank=True)
 
@@ -77,15 +83,18 @@ class BookInstance(models.Model):
     def __str__(self):
         return f"{self.book} ({self.uuid})"
 
-class BookReview(models.Model):
-        book = models.ForeignKey(to="Book", on_delete=models.SET_NULL,
-                                 null=True, blank=True,
-                                 related_name="reviews")
-        reviewer = models.ForeignKey(to=User, on_delete=models.SET_NULL,
-                                     null=True, blank=True)
-        date_created = models.DateTimeField(auto_now_add=True)
-        content = models.TextField()
 
-        class Meta:
-            ordering = ["-date_created"]
+class BookReview(models.Model):
+    book = models.ForeignKey(to="Book", verbose_name="Book", on_delete=models.SET_NULL, null=True, blank=True,
+                             related_name="reviews")
+    reviewer = models.ForeignKey(to="bookshelf.CustomUser", verbose_name="Reviewer", on_delete=models.SET_NULL,
+                                 null=True, blank=True)
+    date_created = models.DateTimeField(verbose_name="Date Created", auto_now_add=True)
+    content = models.TextField(verbose_name="Content", max_length=2000)
+
+    class Meta:
+        verbose_name = "Book Review"
+        verbose_name_plural = "Book Reviews"
+        ordering = ["-date_created"]
+
 

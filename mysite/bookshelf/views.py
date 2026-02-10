@@ -9,7 +9,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic.edit import FormMixin
-from .forms import BookReviewForm
+from .forms import BookReviewForm, CustomUserCreateForm, UserChangeForm
+
 
 
 # Create your views here.
@@ -104,6 +105,18 @@ class MyBookInstanceListView(LoginRequiredMixin, generic.ListView):
 
 
 class SignUpView(generic.CreateView):
-    form_class = UserCreationForm
+    form_class = CustomUserCreateForm
     template_name = "registration/signup.html"
     success_url = reverse_lazy('login')
+
+
+class ProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
+    form_class = UserChangeForm
+    template_name = "profile.html"
+    success_url = reverse_lazy('profile')
+
+    def get_object(self, queryset = ...):
+        return self.request.user
+
+
+

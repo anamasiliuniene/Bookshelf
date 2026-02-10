@@ -2,6 +2,8 @@ from django.contrib import admin
 from .models import Author, Genre, Book, BookInstance, BookReview
 from django.db import models
 from tinymce.widgets import TinyMCE
+from django.contrib.auth.admin import UserAdmin
+from .models import CustomUser
 
 class AuthorAdmin(admin.ModelAdmin):
     list_display = ("short_name", "display_books")
@@ -29,6 +31,11 @@ class BookReviewInLine(admin.TabularInline):
     model = BookReview
     extra = 0
 
+class CustomUserAdmin(UserAdmin):
+    fieldsets = UserAdmin.fieldsets + (
+        ('Additional Info', {'fields': ('photo',)}),
+    )
+
 class BookAdmin(admin.ModelAdmin):
     list_display = ["title", "author", "display_genre"]
     inlines = [BookReviewInLine, BookInstanceInline]
@@ -54,10 +61,10 @@ class BookReviewAdmin(admin.ModelAdmin):
 
 
 
-
 # Register your models here.
 admin.site.register(Author, AuthorAdmin)
 admin.site.register(Genre)
 admin.site.register(Book, BookAdmin)
 admin.site.register(BookInstance, BookInstanceAdmin)
 admin.site.register(BookReview, BookReviewAdmin)
+admin.site.register(CustomUser, CustomUserAdmin)
