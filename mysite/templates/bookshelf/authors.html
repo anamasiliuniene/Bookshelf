@@ -4,9 +4,25 @@
 
 {% block content %}
 
-<h1 class='mb-5'> Authors</h1>
+<h1 class="mb-5">Authors</h1>
+
 {% for author in authors %}
-<p><a href="{% url 'author' author.pk %}"> {{ author }}</a></p>
+<div class="d-flex align-items-center mb-3">
+    {% if author.photo %}
+        <img src="{{ author.photo.url }}"
+             class="rounded-circle me-3"
+             width="50"
+             height="50"
+             style="object-fit: cover;"
+             alt="{{ author }}">
+    {% else %}
+        <i class="bi bi-person-circle fs-2 me-3 text-secondary"></i>
+    {% endif %}
+
+    <a href="{% url 'author' author.pk %}" class="fw-semibold">
+        {{ author }}
+    </a>
+</div>
 <hr>
 {% endfor %}
 

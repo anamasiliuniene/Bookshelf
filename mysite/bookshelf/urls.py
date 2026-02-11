@@ -13,5 +13,5 @@ urlpatterns = [
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
     path('mybooks/', views.MyBookInstanceListView.as_view(), name='mybooks'),
     path('signup/', views.SignUpView.as_view(), name='signup'),
-    path('profile/', views.ProfileUpdateView.as_view(), name='profile'),
+    path('profile/', views.ProfileUpdateView.as_view(), name='profile')
 ]

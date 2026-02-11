@@ -6,7 +6,6 @@ from tinymce.models import HTMLField
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-
 # Create your models here.
 class Author(models.Model):
     first_name = models.CharField()

@@ -46,7 +46,6 @@ def author(request, author_id):
     }
     return render(request, 'bookshelf/author.html', context=context)
 
-
 class BookListView(generic.ListView):
     model = Book
     template_name = 'bookshelf/books.html'
