@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Book instances{% endblock %}
+
+{% block content %}
+<h1>Book Instances</h1>
+  <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'instance_create' %}"> Add new </a>
+<br>
+{% for instance in instances %}
+<a href="{% url 'instance' instance.pk %}">
+<br>
+    <p>{{ instance.book }} - {{ instance.uuid }}
+    <span class="{% if instance.is_overdue %}text-danger{% endif %}">
+        ({{ instance.due_back }}, {{ instance.get_status_display }})
+    </span>
+</p>
+{% empty %}
+<p>No book instances found.</p>
+{% endfor %}
+
+{% endblock %}

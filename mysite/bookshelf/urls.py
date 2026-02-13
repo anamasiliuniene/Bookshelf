@@ -3,6 +3,8 @@ from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
 
+from .views import BookInstanceListView, BookInstanceDetailView
+
 urlpatterns = [
     path('', views.index, name='index'),
     path('authors/', views.authors, name='authors'),
@@ -13,5 +15,10 @@ urlpatterns = [
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
     path('mybooks/', views.MyBookInstanceListView.as_view(), name='mybooks'),
     path('signup/', views.SignUpView.as_view(), name='signup'),
-    path('profile/', views.ProfileUpdateView.as_view(), name='profile')
+    path('profile/', views.ProfileUpdateView.as_view(), name='profile'),
+    path('instances/', BookInstanceListView.as_view(), name='instances'),
+    path('instances/<int:pk>/', BookInstanceDetailView.as_view(), name='instance'),
+    path("instances/create", views.BookInstanceCreateView.as_view(), name="instance_create"),
+    path("instances/<int:pk>/update", views.BookInstanceUpdateView.as_view(), name="instance_update"),
+    path("instances/<int:pk>/delete", views.BookInstanceDeleteView.as_view(), name="instance_delete"),
 ]

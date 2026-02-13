@@ -1,7 +1,9 @@
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, reverse
 from django.views import generic
+from django.views.generic import DetailView
+
 from .models import Book, Author, BookInstance
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -10,7 +12,12 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic.edit import FormMixin
 from .forms import BookReviewForm, CustomUserCreateForm, UserChangeForm
-
+from .forms import InstanceCreateUpdateForm
+from django.views import generic
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.generic import CreateView
+from .models import BookInstance
+from .forms import InstanceCreateUpdateForm
 
 
 # Create your views here.
@@ -98,6 +105,7 @@ class MyBookInstanceListView(LoginRequiredMixin, generic.ListView):
     template_name = 'mybooks.html'
     context_object_name = 'instances'
 
+
     def get_queryset(self):
         # Only show BookInstances where the logged-in user is the reader
         return BookInstance.objects.filter(reader=self.request.user)
@@ -116,6 +124,67 @@ class ProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
 
     def get_object(self, queryset = ...):
         return self.request.user
+
+class BookInstanceListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
+    model = BookInstance
+    context_object_name = "instances"
+    template_name = "bookshelf/bookinstance_list.html"
+    paginate_by = 3
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['instances'] = self.get_queryset()
+        return context
+
+class BookInstanceDetailView(DetailView):
+    model = BookInstance
+    template_name = "bookshelf/instance.html"
+    context_object_name = "instance"
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+class BookInstanceCreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
+    model = BookInstance
+    template_name = "bookshelf/instance_form.html"
+    form_class = InstanceCreateUpdateForm
+    # fields = ['book', 'reader', 'due_back', 'status']
+    success_url = reverse_lazy('instances')
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.save()
+        return super().form_valid(form)
+
+
+class BookInstanceUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
+    model = BookInstance
+    template_name = "bookshelf/instance_form.html"
+    form_class = InstanceCreateUpdateForm
+    # fields = ['book', 'reader', 'due_back', 'status']
+    # success_url = reverse_lazy('instances')
+
+    def get_success_url(self):
+        return reverse("instance", kwargs={"pk": self.object.pk})
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+
+class BookInstanceDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
+    model = BookInstance
+    template_name = "instance_delete.html"
+    context_object_name = "instance"
+    success_url = reverse_lazy('instances')
+
+    def test_func(self):
+        return self.request.user.is_staff
 
 
 

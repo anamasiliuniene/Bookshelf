@@ -97,3 +97,5 @@ class BookReview(models.Model):
         ordering = ["-date_created"]
 
 
+
+

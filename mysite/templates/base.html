@@ -45,6 +45,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'mybooks' %}">MY BOOKS</a>
                 </li>
+                {% if user.is_staff %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'instances' %}">MANAGEMENT</a>
+                </li>
+                {% endif %}
             </ul>
 
             <!-- RIGHT SIDE (pushes everything right) -->

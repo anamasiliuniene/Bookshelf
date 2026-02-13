@@ -3,7 +3,7 @@ from .models import BookReview
 from django import forms
 from .models import CustomUser
 from django.contrib.auth.forms import UserCreationForm
-
+from .models import BookInstance
 
 class BookReviewForm(forms.ModelForm):
     class Meta:
@@ -21,3 +21,10 @@ class CustomUserCreateForm(UserCreationForm):
     class Meta:
         model = CustomUser
         fields = ['username', 'email', 'password1', 'password2']
+
+
+class InstanceCreateUpdateForm(forms.ModelForm):
+    class Meta:
+        model = BookInstance
+        fields = ['book', 'reader', 'due_back', 'status']
+        widgets = {'due_back': forms.DateInput(attrs={'type': 'date'})}

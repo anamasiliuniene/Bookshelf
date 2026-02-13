@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Book instance{% endblock %}
+{% block content %}
+
+<h1>{{ instance.book.title }}</h1>
+<p>by {{ instance.book.author }} </p>
+<div>
+    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'instance_update' instance.pk %}">Edit info</a>
+</div>
+<br>
+<p><strong>UUID: </strong> {{ instance.uuid }}</p>
+{% if instance.reader %}
+<p><strong>Reader: </strong>
+    {% if instance.reader.photo %}
+    <img class="rounded-circle" style="width: 30px" src="{{ instance.reader.photo.url }}">
+    {% endif %}
+    {{ instance.reader.username }}
+</p>
+{% endif %}
+<p><strong>Available: </strong><span class="{% if instance.is_overdue %}text-danger{% endif %}">{{ instance.due_back }}</span></p>
+<p><strong>Status: </strong>{{ instance.get_status_display }}</p>
+<div>
+    <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'instance_delete' instance.pk %}">Delete instance</a>
+</div>
+{% endblock %}
